@@ -18,7 +18,7 @@ exports.getStocks = function(url, callback) {
 	    	for (var i = 1, len = lines.length; i < len; i++) {
 	    		var line = lines[i].toString().split(',');
 	    		if (line[0] && line[1])
-			  		stockInfo.push({ symbol: line[0], name: line[1]});
+			  		stockInfo.push({ name: line[0], fullName: line[1]});
 			}
 
 	    	callback(stockInfo);
