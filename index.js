@@ -10,11 +10,21 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-var stockFetcher = require("./parser/stockParser");
+/* var stockFetcher = require("./parser/stockParser");
 
 stockFetcher.getStocks("http://www.nasdaq.com/screening/companies-by-industry.aspx?exchange=NASDAQ&render=download", function(data){
 	console.log("In callback");
 	console.log(data);	
+}); */
+
+var symbols = ["MSFT", "GOOG", "SQ"];
+var stockFetcher = require("./parser/quarterEarningsParser");
+
+// Loop through some symbols
+symbols.forEach(function(item){
+	stockFetcher.getStocks(item, function(data){
+		console.log(item + " " + data);	
+	});
 });
 
 var port = process.env.PORT || 3000;
