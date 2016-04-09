@@ -5,35 +5,27 @@ var dateformat = require('dateformat');
 
 var exports = module.exports = {};
 
-exports.addStocks = function(Stock, stocks) {
-
-	stocks.forEach( function (stock)
-	{
-	    console.log(stock);
-	    var stockEntry = new Stock();
-	    stockEntry.name = stock.name;
-	    stockEntry.fullName = stock.fullName;
-		stockEntry.save();
-	});
-};
-
-exports.getStocks = function(Stock, callback) {
-	Stock.find({}, function(err, stocks) {
-    	var stockSymbols = [];
+exports.getStocksEarnings = function(StockEarnings, callback) {
+	StockEarnings.find({}, function(err, stocks) {
+	    
+	    if (err)
+	        return;
+	    
+    	var stockEarningInfo = [];
 
     	stocks.forEach(function(stock) {
-    		stockSymbols.push(stock.name);
+    		stockEarningInfo.push({ name: stock.name, day: stock.day, eps: stock.eps});
     	});
 
-    	callback(stockSymbols);  
+    	callback(stockEarningInfo);  
   	});
 };
 
-exports.addStocksIfNotExist = function(Stock, stocks) {
+exports.addStockEarningIfNotExist = function(StockEarnings, stocks) {
 
 	stocks.forEach(function (stock)	{
 		
-		Stock.find({name : stock.name}, function (err, entry) {
+		StockEarnings.find({name : stock.name}, function (err, entry) {
 			
 			if (err) {
 				
@@ -42,9 +34,10 @@ exports.addStocksIfNotExist = function(Stock, stocks) {
 	        if (entry.length) {
 	            console.log("Stock " + stock.name + "exists in database. Skipping.")
 	        } else {
-	        	var stockEntry = new Stock();
+	        	var stockEntry = new StockEarnings();
 			    stockEntry.name = stock.name;
-			    stockEntry.fullName = stock.fullName;
+			    stockEntry.day = stock.day;
+			    stockEntry.eps = stock.eps;
 				stockEntry.save(function(err) {
 					if (err)
 	                	console.log("Error while inserting stock symbol to database.");

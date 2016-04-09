@@ -3,8 +3,9 @@ var express = require("express"),
 bodyParser = require("body-parser");
 
 // Database
-var db = mongoose.connect("mongodb://localhost/stocker");
-var Stock = require("./models/stockModel");
+var mongoDbUrl = "mongodb://" + process.env.IP + "/stocker";
+var db = mongoose.connect(mongoDbUrl);
+var StockEarnings = require("./models/stockEarningsModel");
 
 var app = express();
 
@@ -14,25 +15,16 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-var stockFetcher = require("./parser/stockParser");
-var routes = require("./routes/stockRoutes");
+var earningsRoutes = require("./routes/stockEarningsRoutes");
+var earningsFetcher = require("./parser/quarterEarningsParser");
 
-stockFetcher.getStocks("http://www.nasdaq.com/screening/companies-by-industry.aspx?exchange=NASDAQ&render=download", function(data){
-	console.log("In callback");
+earningsFetcher.getStocksEarnings(function(data){
 	// console.log(data);
-	routes.addStocks(Stock, data);
+	console.log(data.length);
+	
+	earningsRoutes.addStockEarningIfNotExist(StockEarnings, data);
 	
 });
-
-/*var symbols = ["MSFT", "GOOG", "SQ"];
-var stockFetcher = require("./parser/quarterEarningsParser");
-
-// Loop through some symbols
-symbols.forEach(function(item){
-	stockFetcher.getStocks(item, function(data){
-		console.log(item + " " + data);	
-	});
-});*/
 
 var port = process.env.PORT || 3000;
 
@@ -40,6 +32,6 @@ app.get("/", function(req, res) {
 	res.send("Welcome to Stocker!");
 });
 
-app.listen(port, function() {
+/*app.listen(port, function() {
 	console.log("Server listening on" + port);
-});
+});*/
