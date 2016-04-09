@@ -27,9 +27,11 @@ earningsFetcher.getStocksEarnings(function(data){
 	// console.log(data);
 	console.log(data.length);
 	
-	earningsRoutes.addStockEarningIfNotExist(StockEarnings, data);
+	// earningsRoutes.addStockEarningIfNotExist(StockEarnings, data);
 	
 });
+
+app.use("/api/stocks", earningsRoutes.routes(StockEarnings));
 
 var port = process.env.PORT || 3000;
 
@@ -37,6 +39,6 @@ app.get("/", function(req, res) {
 	res.send("Welcome to Stocker!");
 });
 
-/*app.listen(port, function() {
+app.listen(port, function() {
 	console.log("Server listening on" + port);
-});*/
+});
