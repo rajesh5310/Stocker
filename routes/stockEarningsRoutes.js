@@ -51,7 +51,7 @@ exports.getStocksEarnings = function(StockEarnings, callback) {
     	var stockEarningInfo = [];
 
     	stocks.forEach(function(stock) {
-    		stockEarningInfo.push({ name: stock.name, day: stock.day, eps: stock.eps});
+    		stockEarningInfo.push({ name: stock.name,  fullname: stock.fullname, day: stock.day, eps: stock.eps});
     	});
 
     	callback(stockEarningInfo);  
@@ -62,24 +62,16 @@ exports.addStockEarningIfNotExist = function(StockEarnings, stocks) {
 
 	stocks.forEach(function (stock)	{
 		
-		StockEarnings.find({name : stock.name}, function (err, entry) {
-			
-			if (err) {
-				
-			}
-			
-	        if (entry.length) {
-	            logger.debug("Stock %s exists in database. Skipping.", stock.name)
-	        } else {
-	        	var stockEntry = new StockEarnings();
-			    stockEntry.name = stock.name;
-			    stockEntry.day = stock.day;
-			    stockEntry.eps = stock.eps;
-				stockEntry.save(function(err) {
-					if (err)
-	                	logger.error("Error while inserting stock %s symbol to database.", stock.name);
-	            });
-	        }
-	    });
+		// Update/Insert record
+		var query = { name : stock.name };
+    	
+    	StockEarnings.findOneAndUpdate(query, stock, {upsert:true}, function(err, doc){
+		    if (err) {
+		    	logger.error("Error while inserting record ", stock);
+		    	throw(err);
+		    }
+		    
+		    logger.info("Record inserted/updated successfully.", stock)
+		});
 	});
 };

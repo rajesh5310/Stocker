@@ -1,6 +1,4 @@
-var express = require("express"),
-	http = require('http'),
-	jsdom = require('jsdom'),
+var http = require('http'),
 	dateformat = require('dateformat'),
 	logger = require('../utils/logger');
 
@@ -26,11 +24,15 @@ exports.getStocksEarnings = function(callback) {
 	    		var eDay = "NA";
 	    		if (line[2] != "")
 	    			eDay = dateformat(line[2] + " 2016");
-	    		stockInfo.push({ name: line[1], day: eDay, eps: line[4]});
+	    		stockInfo.push({ name: line[1], fullname: line[0], day: eDay, eps: line[4]});
 			}
 
 	    	callback(stockInfo);
 	    });
+	});
+	
+	request.on('error', function (e) {
+    	logger.error("Failed to download csv file. %s.", url);
 	});
 };
 

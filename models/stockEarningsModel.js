@@ -3,6 +3,7 @@ var mongoose = require('mongoose'),
 
 var stockEarningsModel = new Schema({
 	name : { type : String },
+	fullname : {type: String},
 	day : { type : String },
 	eps : { type : String }
 }, { collection : 'StockEarnings' });

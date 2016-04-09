@@ -27,7 +27,7 @@ earningsFetcher.getStocksEarnings(function(data){
 	// console.log(data);
 	console.log(data.length);
 	
-	// earningsRoutes.addStockEarningIfNotExist(StockEarnings, data);
+	earningsRoutes.addStockEarningIfNotExist(StockEarnings, data);
 	
 });
 
