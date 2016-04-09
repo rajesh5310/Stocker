@@ -15,6 +15,7 @@
     "gulp": "^3.9.1",
     "gulp-nodemon": "^2.0.6",
     "jsdom": "^8.3.0",
-    "mongoose": "^4.4.10"
+    "mongoose": "^4.4.10",
+    "winston": "^2.2.0"
   }
 }

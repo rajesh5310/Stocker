@@ -1,6 +1,11 @@
 var express = require("express"),
-	mongoose = require("mongoose");
-bodyParser = require("body-parser");
+	mongoose = require("mongoose"),
+	bodyParser = require("body-parser"),
+	winston = require('winston');;
+
+// setting up logger
+var logger = require('./utils/logger');
+logger.log("Logger started");
 
 // Database
 var mongoDbUrl = "mongodb://" + process.env.IP + "/stocker";

@@ -1,7 +1,4 @@
-var express = require("express");
-var http = require('https');
-var jsdom = require('jsdom');
-var dateformat = require('dateformat');
+var logger = require("../utils/logger");
 
 var exports = module.exports = {};
 
@@ -32,7 +29,7 @@ exports.addStockEarningIfNotExist = function(StockEarnings, stocks) {
 			}
 			
 	        if (entry.length) {
-	            console.log("Stock " + stock.name + "exists in database. Skipping.")
+	            logger.debug("Stock %s exists in database. Skipping.", stock.name)
 	        } else {
 	        	var stockEntry = new StockEarnings();
 			    stockEntry.name = stock.name;
@@ -40,7 +37,7 @@ exports.addStockEarningIfNotExist = function(StockEarnings, stocks) {
 			    stockEntry.eps = stock.eps;
 				stockEntry.save(function(err) {
 					if (err)
-	                	console.log("Error while inserting stock symbol to database.");
+	                	logger.error("Error while inserting stock %s symbol to database.", stock.name);
 	            });
 	        }
 	    });
